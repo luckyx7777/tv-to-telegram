@@ -14,9 +14,16 @@ def webhook():
 
     telegram_url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage"
     payload = {"chat_id": TELEGRAM_CHAT_ID, "text": message}
-    requests.post(telegram_url, data=payload)
-
+    
+    response = requests.post(telegram_url, data=payload)
+    print(f"Telegram response: {response.status_code} - {response.text}")
+    
     return "ok", 200
+
+# Опционально: чтобы GET-запрос на / не давал 404
+@app.route("/", methods=["GET"])
+def home():
+    return "🤖 Бот активен и ждёт сигналы от TradingView", 200
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
